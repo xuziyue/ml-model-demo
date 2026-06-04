@@ -1,0 +1,3 @@
+[submodule ".github/skills-marketplace"]
+	path = .github/skills-marketplace
+	url = https://github.com/xuziyue/internal-skills-marketplace.git

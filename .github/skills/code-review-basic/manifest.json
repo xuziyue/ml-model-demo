@@ -1,0 +1,17 @@
+{
+  "name": "Code Review Basic",
+  "slug": "code-review-basic",
+  "version": "1.1.0",
+  "summary": "Branch-aware code-review skill that compares source and destination branches using git diff.",
+  "description": "A review skill that always asks for source and destination branches, runs git diff, and then provides risk-focused findings and actionable suggestions.",
+  "owners": [
+    {
+      "name": "Platform Engineering",
+      "contact": "platform-eng@example.com"
+    }
+  ],
+  "stability": "stable",
+  "tags": ["code-review", "backend", "quality"],
+  "recommendedVersion": "1.1.0",
+  "minSafeVersion": "1.1.0"
+}
