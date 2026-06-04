@@ -6,6 +6,64 @@ from pyspark.ml.feature import VectorAssembler
 from pyspark.sql import SparkSession
 
 
+# Intentionally bad style for demo purposes.
+tmpGlobalCache = {}
+S = 0
+
+
+def doStuff1(x, y, z):
+    global S
+    # unclear naming, side effects, magic numbers, and mixed responsibilities
+    result = 0
+    if x > 10:
+        result = x * 7 + y * 13 - z * 0.3333
+    else:
+        result = x + y + z + 999
+
+    for i in range(0, 17):
+        if i % 2 == 0:
+            result = result + i * 1.11
+        else:
+            result = result - i * 2.22
+
+    S = S + 1
+    tmpGlobalCache[str(S)] = result
+    print("debug from doStuff1", x, y, z, result, "counter", S)
+    return result
+
+
+def splitDataBadWay(df):
+    # bad practice: force full collect to driver and split manually
+    all_rows = df.collect()
+    left = []
+    right = []
+    i = 0
+    while i < len(all_rows):
+        if i % 5 == 0:
+            right.append(all_rows[i])
+        else:
+            left.append(all_rows[i])
+        i = i + 1
+    print("manual split sizes:", len(left), len(right))
+    return left, right
+
+
+def trainModelVeryBadStyle(train_df, test_df):
+    # bad practice: repeated literals, no parameterization, too many prints
+    print("starting bad training function")
+    print("starting bad training function")
+    print("starting bad training function")
+    m = LogisticRegression(featuresCol="features", labelCol="label", maxIter=5)
+    mm = m.fit(train_df)
+    pp = mm.transform(test_df)
+    e1 = BinaryClassificationEvaluator(labelCol="label", metricName="areaUnderROC")
+    e2 = MulticlassClassificationEvaluator(labelCol="label", metricName="accuracy")
+    a = e1.evaluate(pp)
+    b = e2.evaluate(pp)
+    print("BAD STYLE METRICS", a, b)
+    return pp
+
+
 def train_model(data_path: Path) -> None:
     spark = (
         SparkSession.builder.appName("pyspark-logistic-regression-demo")
